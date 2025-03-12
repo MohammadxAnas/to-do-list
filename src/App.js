@@ -10,7 +10,7 @@ export default function TodoApp() {
   const [editingTask, setEditingTask] = useState(null);
   const [editedText, setEditedText] = useState("");
 
-  // Fetch tasks from backend
+  // Fetch tasks from backendd
   const fetchTasks = async () => {
     try {
       const res = await axios.get(`${baseURL}/get`);
