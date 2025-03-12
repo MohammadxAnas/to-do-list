@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import { baseURL } from "./utils/constant";
-
+import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 
 export default function TodoApp() {
   const [tasks, setTasks] = useState([]);
@@ -87,7 +87,7 @@ export default function TodoApp() {
           style={{ outline: "none" }}
         />
         <button onClick={addTask} className="add-btn">
-         
+          <FaPlus />
         </button>
       </div>
 
@@ -116,10 +116,10 @@ export default function TodoApp() {
                 </span>
                 <div className="task-buttons">
                   <button onClick={() => startEditing(task)} className="edit-btn">
-                   
+                    <FaEdit />
                   </button>
                   <button onClick={() => removeTask(task._id)} className="delete-btn">
-                    
+                    <FaTrash />
                   </button>
                 </div>
               </>
