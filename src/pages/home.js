@@ -101,7 +101,7 @@ export default function Home() {
     <div className="greeting">
         <h1>⚡ welcome back, {loggedInUser}</h1>
         <button className="logout" onClick={handleLogout}>Logout</button>
-        <ToastContainer/>
+      
     </div>
     <div className="container">
       <h1>To-Do List</h1>
@@ -154,6 +154,7 @@ export default function Home() {
           </li>
         ))}
       </ul>
+      <ToastContainer/>
     </div>
     </>
   );

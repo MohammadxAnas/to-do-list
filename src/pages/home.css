@@ -123,6 +123,7 @@
   }
   .logout{
     border: none;
+    margin-left: ;
     padding: 10px 20px 10px 20px;
     border-radius: 5px;
     background-color: #28a745;
@@ -133,3 +134,4 @@
     background: #218838;
     cursor: pointer;
   }
+ 
