@@ -104,7 +104,7 @@ export default function Home() {
       
     </div>
     <div className="container">
-      <h1>To-Do List</h1>
+      <h1>✨ To-Do List </h1>
       <div className="input-section">
         <input
           type="text"
