@@ -20,14 +20,26 @@ export default function Home() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("loggedInUser");
-
+  
     if (!token) {
       navigate("/login"); // Redirect to login if no token found
     } else {
       setLoggedInUser(user);
       fetchTasks(token);
     }
+  
+    // Clear localStorage when tab is closed
+    const handleUnload = () => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("loggedInUser");
+    };
+    window.addEventListener("beforeunload", handleUnload);
+  
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
   }, [navigate]);
+  
 
   const handleLogout = () => {
     localStorage.removeItem("token");
