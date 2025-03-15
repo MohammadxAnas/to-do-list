@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {ToastContainer} from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"; 
 import {handleError,handleSuccess} from "../utils/toast"
+import { baseURL } from "../utils/constant";
 
 const Signup = () => {
     const [signupData, setsignupData] = useState({
@@ -29,7 +30,8 @@ const Signup = () => {
             return handleError('name, email and password required!');
         }
         try {
-            const url = "http://localhost:5000/auth/signup";
+            const url = `${baseURL}/auth/signup`;
+;
             const response = await fetch(url,{
                 method: "POST",
                 headers:{
