@@ -34,7 +34,7 @@ export default function Home() {
   // Fetch tasks from backendd
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`${baseURL}/get`);
+      const res = await axios.get(`${baseURL}/api/get`);
       setTasks(res.data);
     } catch (err) {
       console.error("Error fetching tasks:", err);
@@ -49,7 +49,7 @@ export default function Home() {
   const addTask = async () => {
     if (newTask.trim() === "") return;
     try {
-      const res = await axios.post(`${baseURL}/save`, { todo: newTask, completed: false });
+      const res = await axios.post(`${baseURL}/api/save`, { todo: newTask, completed: false });
       setTasks([...tasks, res.data]);
       setNewTask("");
     } catch (err) {
@@ -60,7 +60,7 @@ export default function Home() {
   // Toggle task completion
   const toggleTaskCompletion = async (id, completed) => {
     try {
-      await axios.put(`${baseURL}/update/${id}`, { completed: !completed });
+      await axios.put(`${baseURL}/api/update/${id}`, { completed: !completed });
       setTasks(tasks.map((task) => (task._id === id ? { ...task, completed: !completed } : task)));
     } catch (err) {
       console.error("Error updating task completion:", err);
@@ -70,7 +70,7 @@ export default function Home() {
   // Delete a task
   const removeTask = async (id) => {
     try {
-      await axios.delete(`${baseURL}/delete/${id}`);
+      await axios.delete(`${baseURL}/api/delete/${id}`);
       setTasks(tasks.filter((task) => task._id !== id));
     } catch (err) {
       console.error("Error deleting task:", err);
@@ -87,7 +87,7 @@ export default function Home() {
   const updateTask = async () => {
     if (editedText.trim() === "") return;
     try {
-      await axios.put(`${baseURL}/update/${editingTask}`, { todo: editedText });
+      await axios.put(`${baseURL}/api/update/${editingTask}`, { todo: editedText });
       setTasks(tasks.map((task) => (task._id === editingTask ? { ...task, todo: editedText } : task)));
       setEditingTask(null);
       setEditedText("");

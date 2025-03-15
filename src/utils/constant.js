@@ -1,1 +1,1 @@
-export const baseURL = `https://to-do-server-deployment.onrender.com/api`;
+export const baseURL = `https://to-do-server-deployment.onrender.com`;
