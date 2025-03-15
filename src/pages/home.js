@@ -42,7 +42,7 @@ export default function Home() {
   const fetchTasks = async (token) => {
     setLoading(true); // 🔹 Start loading before API call
     try {
-      const res = await axios.get("http://localhost:5000/api/get", {
+      const res = await axios.get(`${baseURL}/api/get`, {
         headers: { Authorization: token },
       });
       setTasks(res.data);
@@ -58,7 +58,7 @@ export default function Home() {
     if (newTask.trim() === "") return;
     try {
       const res = await axios.post(
-       "http://localhost:5000/api/save",
+       `${baseURL}/api/save`,
         { todo: newTask, completed: false },
         { headers: { Authorization: localStorage.getItem("token") } }
       );
@@ -73,7 +73,7 @@ export default function Home() {
   const toggleTaskCompletion = async (id, completed) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/update/${id}`,
+        `${baseURL}/api/update/${id}`,
         { completed: !completed },
         { headers: { Authorization: localStorage.getItem("token") } }
       );
@@ -86,7 +86,7 @@ export default function Home() {
   // Delete a task
   const removeTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/delete/${id}`, {
+      await axios.delete(`${baseURL}/api/delete/${id}`, {
         headers: { Authorization: localStorage.getItem("token") },
       });
       setTasks(tasks.filter((task) => task._id !== id));
@@ -106,7 +106,7 @@ export default function Home() {
     if (editedText.trim() === "") return;
     try {
       await axios.put(
-        `http://localhost:5000/api/update/${editingTask}`,
+        `${baseURL}/api/update/${editingTask}`,
         { todo: editedText },
         { headers: { Authorization: localStorage.getItem("token") } }
       );
