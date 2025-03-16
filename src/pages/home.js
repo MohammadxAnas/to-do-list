@@ -50,29 +50,29 @@ export default function Home() {
     }, 1000);
   };
 
-  // Fetch tasks from backend with authentication
   const fetchTasks = async (token) => {
-    setLoading(true); // 🔹 Start loading before API call
+    setLoading(true);
     try {
       const res = await axios.get(`${baseURL}/api/get`, {
-        headers: { Authorization: token },
+        headers: { Authorization: `Bearer ${token}` },
       });
+      
       setTasks(res.data);
     } catch (err) {
-      console.error("Error fetching tasks:", err);
+      console.error("Error fetching tasks:", err.response?.data || err.message);
     } finally {
-      setLoading(false); // 🔹 Stop loading after API call
+      setLoading(false);
     }
   };
-
-  // Add a new task
+  
+  
   const addTask = async () => {
     if (newTask.trim() === "") return;
     try {
       const res = await axios.post(
-       `${baseURL}/api/save`,
+        `${baseURL}/api/save`,
         { todo: newTask, completed: false },
-        { headers: { Authorization: localStorage.getItem("token") } }
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       setTasks([...tasks, res.data]);
       setNewTask("");
@@ -80,6 +80,7 @@ export default function Home() {
       console.error("Error adding task:", err);
     }
   };
+  
 
   // Toggle task completion
   const toggleTaskCompletion = async (id, completed) => {
@@ -99,7 +100,7 @@ export default function Home() {
   const removeTask = async (id) => {
     try {
       await axios.delete(`${baseURL}/api/delete/${id}`, {
-        headers: { Authorization: localStorage.getItem("token") },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setTasks(tasks.filter((task) => task._id !== id));
     } catch (err) {
