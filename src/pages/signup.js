@@ -13,6 +13,8 @@ const Signup = () => {
         password: ""
     });
 
+    const [loading, setLoading] = useState(false); // State for loader
+
     const handleChange =  (e) => {
        const {name, value}= e.target;
        const copyinfo= {...signupData};
@@ -29,6 +31,7 @@ const Signup = () => {
         if(!name ||!email || !password){
             return handleError('name, email and password required!');
         }
+        setLoading(true);
         try {
             const url = `${baseURL}/auth/signup`;
 ;
@@ -55,6 +58,8 @@ const Signup = () => {
             }
         } catch (err) {
             handleError(err);
+        }finally{
+            setLoading(false);
         }
     };
 
@@ -72,7 +77,9 @@ const Signup = () => {
                 <label htmlFor="password">Password:</label>
                 <input type="password" name="password" placeholder="Password"  value={signupData.password}  onChange={handleChange} required />
 
-                <button type="submit">Sign Up</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? <div className="signuploader"></div> : "Sign up"}
+                </button>
                 <span>Already have an account?
                     <Link to="/login">Login</Link>
                 </span>
