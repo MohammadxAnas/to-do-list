@@ -78,7 +78,13 @@ const Signup = () => {
                 <input type="password" name="password" placeholder="Password"  value={signupData.password}  onChange={handleChange} required />
 
                 <button type="submit" disabled={loading}>
-                    {loading ? <div className="signuploader"></div> : "Sign up"}
+                {loading ? (
+                <div className="login-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+                </div>
+                ) : "Sign up"}
                 </button>
                 <span>Already have an account?
                     <Link to="/login">Login</Link>
