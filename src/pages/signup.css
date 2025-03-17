@@ -1,114 +1,108 @@
-/* Soft white & neutral background */
-.signup-container {
+/* Background styling */
+body {
+    background: url('background.jpg') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Container for signup form */
+  .signup-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, #f9f9f9, #ececec);
-}
-
-/* Signup Form Styling */
-.signup-form {
-    background: #ffffff;
+    width: 100%;
+  }
+  
+  /* Form styling */
+  .signup-form {
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
     padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     width: 350px;
-    display: flex;
-    flex-direction: column;
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.signup-form:hover {
-    transform: translateY(-3px);
-    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
-}
-
-/* Title */
-.signup-form h2 {
+  }
+  
+  /* Form elements */
+  h2 {
     color: #333;
-    font-size: 24px;
-    font-weight: bold;
     margin-bottom: 20px;
-}
-
-/* Label Styling */
-.signup-form label {
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #666;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  
+  label {
+    display: block;
+    margin-top: 10px;
     text-align: left;
-}
-
-/* Input Fields */
-.signup-form input {
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    background: #f8f8f8;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-}
-
-.signup-form input:focus {
-    border-color: #ccc;
-    outline: none;
-    box-shadow: 0 0 5px rgba(200, 200, 200, 0.5);
-}
-
-/* Buttons */
-.signup-form button {
-    background: #f0f0f0;
-    color: #333;
-    border: none;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 6px;
-    height: 40px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.signup-form button:hover {
-    background: #e0e0e0;
-    transform: scale(1.05);
-}
-
-/* Centering the span */
-span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
     font-size: 14px;
-}
-.signup-loader {
+    color: #555;
+  }
+  
+  input {
+    width: 94%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+  }
+  
+  button {
+    width: 100%;
+    background: #ff9800;
+    color: white;
+    padding: 10px;
+    margin-top: 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: 0.3s;
+  }
+  
+  button:hover {
+    background: #e68900;
+  }
+  
+  /* Loader animation */
+  .signup-loader {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px;
-}
-
-.signup-loader div {
+  }
+  
+  .signup-loader div {
     width: 8px;
     height: 8px;
-    background-color: grey;
+    margin: 3px;
+    background: #ff9800;
     border-radius: 50%;
-    animation: blink 1.4s infinite both;
-}
-
-.signup-loader div:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.signup-loader div:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-@keyframes blink {
-    0%, 80%, 100% { opacity: 0; }
-    40% { opacity: 1; }
-}
+    animation: bounce 0.6s infinite ease-in-out;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  /* Login link */
+  span {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  
+  span a {
+    color: #ff9800;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  span a:hover {
+    text-decoration: underline;
+  }
+  

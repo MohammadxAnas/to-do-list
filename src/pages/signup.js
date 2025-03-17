@@ -66,7 +66,7 @@ const Signup = () => {
     return (
         <div className="signup-container">
             <form className="signup-form" onSubmit={handleSubmit}>
-                <h2>Sign Up</h2>
+                <h2>FocusFlow🎯</h2>
                 
                 <label htmlFor="name">Name:</label>
                 <input type="text" name="name" autoFocus placeholder="username" value={signupData.name}  onChange={handleChange} required />
@@ -79,7 +79,7 @@ const Signup = () => {
 
                 <button type="submit" disabled={loading}>
                 {loading ? (
-                <div className="login-loader">
+                <div className="signup-loader">
                 <div></div>
                 <div></div>
                 <div></div>

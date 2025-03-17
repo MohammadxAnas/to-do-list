@@ -55,9 +55,10 @@ const Login = () => {
     };
 
     return (
-        <div className="login-container">
+        <div className="login-page">
+  <div className="login-container">
             <form className="login-form" onSubmit={handleSubmit}>
-                <h2>Login</h2>
+                <h2>FocusFlow🎯</h2>
 
                 <label htmlFor="email">Email:</label>
                 <input type="email" name="email" placeholder="Email" value={loginInfo.email} onChange={handleChange} required />
@@ -81,6 +82,8 @@ const Login = () => {
             </form>
             <ToastContainer />
         </div>
+        </div>
+      
     );
 };
 

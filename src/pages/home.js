@@ -138,7 +138,7 @@ export default function Home() {
         <button className="logout" onClick={handleLogout}>Logout</button>
       </div>
 
-      <div className="container">
+      <div className="home">
         <h1>✨ To-Do List </h1>
 
         {/* 🔹 Show Loader while fetching data */}
