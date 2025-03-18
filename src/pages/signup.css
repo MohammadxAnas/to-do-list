@@ -72,6 +72,7 @@
 
 .signup-page button:hover {
     background: #e68900;
+    transform: scale(1.01);
 }
 
 /* Loader animation */
@@ -85,7 +86,7 @@
     width: 8px;
     height: 8px;
     margin: 3px;
-    background: #ff9800;
+    background: #ffac2f;
     border-radius: 50%;
     animation: bounce 0.6s infinite ease-in-out;
 }

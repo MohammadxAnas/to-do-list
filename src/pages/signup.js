@@ -26,7 +26,6 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("User Data:", signupData);
         const {name, email, password}= signupData;
         if(!name ||!email || !password){
             return handleError('name, email and password required!');
@@ -43,12 +42,12 @@ const Signup = () => {
                 body: JSON.stringify(signupData)
             });
             const result = await response.json();
-            console.log(result);
             const {success,message,error}=result;
             if(success){
+                localStorage.setItem("userEmail", email);
                 handleSuccess(message);
                 setTimeout(()=>{
-                    navigate('/login')
+                    navigate("/conf");
                 },1000);
             }else if(error){
                 const details= error?.details[0].message;

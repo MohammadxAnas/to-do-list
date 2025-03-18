@@ -1,5 +1,5 @@
-/* Scope styles to the login page */
-.login-page {
+/* Scope styles to the conf page */
+.conf-page {
     background: url('background.jpg') no-repeat center center/cover;
     height: 100vh;
     display: flex;
@@ -8,7 +8,7 @@
     font-family: "Poppins", sans-serif;
 }
 
-.login-page .login-container {
+.conf-page .conf-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,7 +16,7 @@
     width: 100%;
 }
 
-.login-page .login-form {
+.conf-page .conf-form {
     background: rgba(255, 255, 255, 0.95);
     padding: 30px;
     border-radius: 12px;
@@ -26,14 +26,14 @@
     backdrop-filter: blur(8px);
 }
 
-.login-page h2 {
+.conf-page h2 {
     color: #333;
     font-size: 24px;
     margin-bottom: 20px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-.login-page label {
+.conf-page label {
     display: block;
     margin-top: 10px;
     text-align: left;
@@ -42,7 +42,7 @@
     font-weight: 600;
 }
 
-.login-page input {
+.conf-page input {
     width: 94%;
     padding: 12px;
     margin-top: 5px;
@@ -53,13 +53,13 @@
     transition: border 0.3s;
 }
 
-.login-page input:focus {
+.conf-page input:focus {
     border-color: #ff9800;
     box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
 }
 
 /* Scoped Button */
-.login-page button {
+.conf-page button {
     width: 100%;
     background: #ff9800;
     color: white;
@@ -72,19 +72,19 @@
     transition: 0.3s;
 }
 
-.login-page button:hover {
+.conf-page button:hover {
     background: #e68900;
     transform: scale(1.01);
 }
 
 /* Scoped Loader */
-.login-page .login-loader {
+.conf-page .conf-loader {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.login-page .login-loader div {
+.conf-page .conf-loader div {
     width: 10px;
     height: 10px;
     margin: 3px;
@@ -95,34 +95,38 @@
 
 /* Responsive Design */
 @media (max-width: 480px) {
-    .login-page .login-form {
+    .conf-page .conf-form {
         width: 90%;
         padding: 20px;
     }
-    .login-page h2 {
+    .conf-page h2 {
         font-size: 20px;
     }
-    .login-page input {
+    .conf-page input {
         font-size: 12px;
         padding: 10px;
     }
-    .login-page button {
+    .conf-page button {
         height: 40px;
         font-size: 14px;
     }
 }
-.login-page span {
+.conf-page span {
     display: block;
     margin-top: 15px;
     font-size: 14px;
 }
 
-.login-page span a {
+.conf-page span a {
     color: #ff9800;
     text-decoration: none;
     font-weight: bold;
 }
 
-.login-page span a:hover {
+.conf-page span a:hover {
     text-decoration: underline;
+}
+.go-back{
+    font-size: 16px;
+    text-decoration: none;
 }
