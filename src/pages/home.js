@@ -88,7 +88,7 @@ export default function Home() {
       await axios.put(
         `${baseURL}/api/update/${id}`,
         { completed: !completed },
-        { headers: { Authorization: localStorage.getItem("token") } }
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       setTasks(tasks.map((task) => (task._id === id ? { ...task, completed: !completed } : task)));
     } catch (err) {
@@ -121,7 +121,7 @@ export default function Home() {
       await axios.put(
         `${baseURL}/api/update/${editingTask}`,
         { todo: editedText },
-        { headers: { Authorization: localStorage.getItem("token") } }
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       setTasks(tasks.map((task) => (task._id === editingTask ? { ...task, todo: editedText } : task)));
       setEditingTask(null);
@@ -133,13 +133,14 @@ export default function Home() {
 
   return (
     <>
-      <div className="greeting">
-        <h1>⚡ Welcome back, {loggedInUser}</h1>
+    <div className="main">
+    <div className="greeting">
+        <h1 className="logo">FocusFlow🎯</h1>
         <button className="logout" onClick={handleLogout}>Logout</button>
       </div>
 
       <div className="home">
-        <h1>✨ To-Do List </h1>
+        <h1>✨What’s the Plan Today? </h1>
 
         {/* 🔹 Show Loader while fetching data */}
         {loading ? (
@@ -199,6 +200,7 @@ export default function Home() {
         )}
         <ToastContainer />
       </div>
+    </div>
     </>
   );
 }

@@ -64,7 +64,8 @@ const Signup = () => {
     };
 
     return (
-        <div className="signup-container">
+        <div className="signup-page">
+<div className="signup-container">
             <form className="signup-form" onSubmit={handleSubmit}>
                 <h2>FocusFlow🎯</h2>
                 
@@ -93,6 +94,8 @@ const Signup = () => {
             </form>
             <ToastContainer/>
         </div>
+        </div>
+        
     );
 };
 
