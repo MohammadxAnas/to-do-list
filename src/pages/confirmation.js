@@ -11,14 +11,7 @@ import { baseURL } from "../utils/constant";
 const Conf = () => {
     const [confCode, setconfCode] = useState({ code: ""});
     const [loading, setLoading] = useState(false); // State for loader
-    const [email, setEmail] = useState("");
 
-    useEffect(() => {
-    const storedEmail = localStorage.getItem("userEmail");
-    if (storedEmail) {
-        setEmail(storedEmail);
-    }
-    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -37,7 +30,8 @@ const Conf = () => {
         setLoading(true); // Show loader
 
         try {
-            const data = { email, code: confCode.code };
+            const storedEmail = localStorage.getItem("userEmail");
+            const data = { email: storedEmail, code: confCode.code };
             const url = `${baseURL}/auth/verify`;
             const response = await fetch(url, {
                 method: "POST",
@@ -46,7 +40,6 @@ const Conf = () => {
             });
 
             const result = await response.json();
-            console.log(result);
             const { success, message, error } = result;
 
             if (success) {
