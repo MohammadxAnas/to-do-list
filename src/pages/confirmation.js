@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./confirmation.css"; 
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -6,29 +6,33 @@ import "react-toastify/dist/ReactToastify.css";
 import { handleError, handleSuccess } from "../utils/toast";
 import { baseURL } from "../utils/constant";
 
-
-
 const Conf = () => {
-    const [confCode, setconfCode] = useState({ code: ""});
-    const [loading, setLoading] = useState(false); // State for loader
-
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setconfCode((prev) => ({ ...prev, [name]: value }));
-    };
+    const [confCode, setConfCode] = useState({ code: "" });
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const storedEmail = localStorage.getItem("userEmail");
+        if (!storedEmail) {
+            navigate("/login");
+        }
+    }, [navigate]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setConfCode((prev) => ({ ...prev, [name]: value }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if ( !confCode.code) {
+    
+        if (!confCode.code) {
             return handleError("Confirmation code required!");
         }
-
+    
         setLoading(true); // Show loader
-
+    
         try {
             const storedEmail = localStorage.getItem("userEmail");
             const data = { email: storedEmail, code: confCode.code };
@@ -38,12 +42,16 @@ const Conf = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
-
+    
             const result = await response.json();
             const { success, message, error } = result;
-
+    
             if (success) {
                 handleSuccess(message);
+                
+                // ✅ Remove email from localStorage after successful verification
+                localStorage.removeItem("userEmail");
+    
                 setTimeout(() => {
                     navigate("/login");
                 }, 1000);
@@ -56,35 +64,36 @@ const Conf = () => {
             setLoading(false); // Hide loader after completion
         }
     };
+    
 
     return (
         <div className="conf-page">
-  <div className="conf-container">
-            <form className="conf-form" onSubmit={handleSubmit}>
-                <h3>Enter Confirmation Code</h3>
-                <p><span>Enter the 6-digit code we sent to<br/>your email.<b>Request a new one.</b></span></p>
-                <input name="code" placeholder="Confirmation Code" value={confCode.code} onChange={handleChange} required />
+            <div className="conf-container">
+                <form className="conf-form" onSubmit={handleSubmit}>
+                    <h3>Enter Confirmation Code</h3>
+                    <p><span>Enter the 6-digit code we sent to<br/>your email.<b>Request a new one.</b></span></p>
+                    <input name="code" placeholder="Confirmation Code" value={confCode.code} onChange={handleChange} required />
 
-                <button type="submit" disabled={loading}>
-                {loading ? (
-                <div className="conf-loader">
-                <div></div>
-                <div></div>
-                <div></div>
-                </div>
-                ) : "Next"}
-                </button>
-                <span>
-                 <Link to="/signup" className="go-back">Go back</Link>
-                </span>
-                <span>
-                    Have an account? <Link to="/login">Log in</Link>
-                </span>
-            </form>
-            <ToastContainer />
+                    <button type="submit" disabled={loading}>
+                        {loading ? (
+                            <div className="conf-loader">
+                                <div></div><div></div><div></div>
+                            </div>
+                        ) : "Next"}
+                    </button>
+                    <span>
+                      <Link 
+                     to="/signup" 
+                     className="go-back" 
+                     onClick={() => localStorage.removeItem("userEmail")} >Go back</Link>
+                    </span>
+                    <span>
+                        Have an account? <Link to="/login">Log in</Link>
+                    </span>
+                </form>
+                <ToastContainer />
+            </div>
         </div>
-        </div>
-      
     );
 };
 
