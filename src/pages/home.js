@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./home.css";
 import { baseURL } from "../utils/constant";
+import { API_KEY } from "../utils/constant";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
 import { handleSuccess } from "../utils/toast";
+
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
@@ -16,6 +18,29 @@ export default function Home() {
   const [loggedInUser, setLoggedInUser] = useState("");
   const [loading, setLoading] = useState(true); // 🔹 Loading state added
   const navigate = useNavigate();
+
+  const sendMessage = async (TODO) => {
+    try{
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `Give a brief 2-3 line suggestion on how to complete this task: "${TODO}".` }] }],
+        }),
+      })
+      const data = await response.json();
+      const suggestion =
+        data.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "Sorry, I didn't understand that.";
+      console.log(suggestion);
+    }catch(error){
+      console.error("Error fetching response:", error);
+    }  
+    };
+  
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -189,6 +214,9 @@ export default function Home() {
                         </button>
                         <button onClick={() => removeTask(task._id)} className="delete-btn">
                           <FaTrash />
+                        </button>
+                        <button onClick={() => sendMessage(task.todo)} className="idea-btn">
+                        ✨ 
                         </button>
                       </div>
                     </>

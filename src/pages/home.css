@@ -163,6 +163,17 @@ h1 {
     transform: scale(1.05);
 }
 
+.idea-btn{
+    background: none;
+    border: none;
+    font-size: 18px;
+    padding-bottom: 5px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+.idea-btn:hover{
+    transform: scale(1.2);
+}
+
 /* Edit Area - Stylish Input */
 .edit-area {
     outline: none;
