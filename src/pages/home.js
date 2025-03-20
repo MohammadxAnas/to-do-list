@@ -3,7 +3,7 @@ import axios from "axios";
 import "./home.css";
 import { baseURL } from "../utils/constant";
 import { API_KEY } from "../utils/constant";
-import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaLightbulb } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
@@ -15,11 +15,15 @@ export default function Home() {
   const [newTask, setNewTask] = useState("");
   const [editingTask, setEditingTask] = useState(null);
   const [editedText, setEditedText] = useState("");
-  const [loggedInUser, setLoggedInUser] = useState("");
+  const [loggedInUser, setLoggedInUser] = useState();
   const [loading, setLoading] = useState(true); // 🔹 Loading state added
   const navigate = useNavigate();
 
-  const sendMessage = async (TODO) => {
+  const [taskSuggestions, setTaskSuggestions] = useState({});
+
+
+
+  const sendMessage = async (TODO,taskId) => {
     try{
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
@@ -34,7 +38,14 @@ export default function Home() {
       const suggestion =
         data.candidates?.[0]?.content?.parts?.[0]?.text ||
         "Sorry, I didn't understand that.";
-      console.log(suggestion);
+      console.log("suggestion=",suggestion);
+        setTaskSuggestions((prev) => {
+          const updatedSuggestions = { ...prev, [taskId]: suggestion };
+          console.log("Updated Suggestions:", updatedSuggestions); // 🔍 Log new state
+          return updatedSuggestions;
+        });
+     
+      
     }catch(error){
       console.error("Error fetching response:", error);
     }  
@@ -186,44 +197,62 @@ export default function Home() {
             </div>
 
             <ul className="task-list">
-              {tasks.map((task) => (
-                <li key={task._id} className="task-item">
-                  {editingTask === task._id ? (
-                    <>
-                      <input
-                        className="edit-area"
-                        type="text"
-                        value={editedText}
-                        onChange={(e) => setEditedText(e.target.value)}
-                        style={{ outline: "none" }}
-                      />
-                      <button onClick={updateTask} className="save-btn">Save</button>
-                    </>
-                  ) : (
-                    <>
-                      <span
-                        className="task-text"
-                        onClick={() => toggleTaskCompletion(task._id, task.completed)}
-                        style={{ textDecoration: task.completed ? "line-through" : "none", cursor: "pointer" }}
-                      >
-                        {task.todo}
-                      </span>
-                      <div className="task-buttons">
-                        <button onClick={() => startEditing(task)} className="edit-btn">
-                          <FaEdit />
-                        </button>
-                        <button onClick={() => removeTask(task._id)} className="delete-btn">
-                          <FaTrash />
-                        </button>
-                        <button onClick={() => sendMessage(task.todo)} className="idea-btn">
-                        ✨ 
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
+        {tasks.map((task) => (
+          <li key={task._id} className="task-item">
+            {editingTask === task._id ? (
+              <>
+                <input
+                  className="edit-area"
+                  type="text"
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                />
+                <button onClick={updateTask} className="save-btn">Save</button>
+              </>
+            ) : (
+              <>
+                {/* Task Text and Buttons in a separate div */}
+                <div className="task-content">
+                  <span
+                    className="task-text"
+                    onClick={() => toggleTaskCompletion(task._id, task.completed)}
+                    style={{
+                      textDecoration: task.completed ? "line-through" : "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {task.todo}
+                  </span>
+
+                  <div className="task-buttons">
+                    <button onClick={() => startEditing(task)} className="edit-btn">
+                      <FaEdit />
+                    </button>
+                    <button onClick={() => removeTask(task._id)} className="delete-btn">
+                      <FaTrash />
+                    </button>
+
+                    {/* Hide Idea Button when a suggestion is available */}
+                    {!taskSuggestions[task._id] && (
+                      <button onClick={() => sendMessage(task.todo, task._id)} className="idea-btn">
+                        ✨
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Suggestion should appear on a new line */}
+                {taskSuggestions[task._id] && (
+                  <div className="task-suggestion">
+                    <FaLightbulb /> {taskSuggestions[task._id]}
+                  </div>
+                )}
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+
           </>
         )}
         <ToastContainer />
