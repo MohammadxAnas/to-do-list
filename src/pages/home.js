@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
 import { handleSuccess } from "../utils/toast";
+import jwtDecode from "jwt-decode"; 
 
 
 export default function Home() {
@@ -39,7 +40,7 @@ export default function Home() {
         data.candidates?.[0]?.content?.parts?.[0]?.text ||
         "Sorry, I didn't understand that.";
       suggestion = suggestion.replace(/\*\*/g, ""); 
-      suggestion = suggestion.replace(/\* /g,"⚡" ); 
+      suggestion = suggestion.replace(/\* /g,"✨" ); 
       console.log(suggestion);
       setTaskSuggestions((prev) => ({
         ...prev,
@@ -63,7 +64,7 @@ export default function Home() {
       setLoggedInUser(user);
       fetchTasks(token);
     }
-  
+
     // Clear localStorage when tab is closed
     const handleUnload = () => {
       localStorage.removeItem("token");
@@ -167,12 +168,51 @@ export default function Home() {
     }
   };
 
+  
+  const handleRemove = () => {
+    if (!window.confirm("Are you sure you want to remove your account? This action cannot be undone.")) {
+        return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.error("No token found. Cannot remove account.");
+        return;
+    }
+
+    try {
+        const decodedToken = jwtDecode(token); // Decode the token
+        const userId = decodedToken.id; // Extract user ID (check JWT structure)
+
+        axios.delete(`${baseURL}/auth/remove/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(() => {
+            localStorage.clear();
+            handleSuccess("Account removed successfully!");
+            setTimeout(() => {
+                navigate("/signup"); // Redirect to signup
+            }, 1000);
+        })
+        .catch((err) => {
+            console.error("Error removing account:", err);
+        });
+    } catch (error) {
+        console.error("Error decoding token:", error);
+    }
+};
+
+
+
   return (
     <>
     <div className="main">
     <div className="greeting">
         <h1 className="logo">FocusFlow🎯</h1>
+        <div>
         <button className="logout" onClick={handleLogout}>Logout</button>
+        <button className="remove-acc" onClick={handleRemove}>Remove Account</button>
+        </div>
       </div>
 
       <div className="home">

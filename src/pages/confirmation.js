@@ -9,6 +9,7 @@ import { baseURL } from "../utils/constant";
 const Conf = () => {
     const [confCode, setConfCode] = useState({ code: "" });
     const [loading, setLoading] = useState(false);
+    const [userEmail, setUserEmail] = useState(""); // State to store email
 
     const navigate = useNavigate();
 
@@ -16,6 +17,8 @@ const Conf = () => {
         const storedEmail = localStorage.getItem("userEmail");
         if (!storedEmail) {
             navigate("/login");
+        } else {
+            setUserEmail(storedEmail); // Store email in state
         }
     }, [navigate]);
 
@@ -34,8 +37,7 @@ const Conf = () => {
         setLoading(true); // Show loader
     
         try {
-            const storedEmail = localStorage.getItem("userEmail");
-            const data = { email: storedEmail, code: confCode.code };
+            const data = { email: userEmail, code: confCode.code };
             const url = `${baseURL}/auth/verify`;
             const response = await fetch(url, {
                 method: "POST",
@@ -49,7 +51,7 @@ const Conf = () => {
             if (success) {
                 handleSuccess(message);
                 
-                // ✅ Remove email from localStorage after successful verification
+                //  Remove email from localStorage after successful verification
                 localStorage.removeItem("userEmail");
     
                 setTimeout(() => {
@@ -59,33 +61,50 @@ const Conf = () => {
                 handleError(error?.details?.[0]?.message || message);
             }
         } catch (error) {
+            console.error("Verification Error:", error);
             handleError("Invalid code. Please try again.");
         } finally {
             setLoading(false); // Hide loader after completion
         }
     };
-    
 
     return (
         <div className="conf-page">
             <div className="conf-container">
                 <form className="conf-form" onSubmit={handleSubmit}>
                     <h3>Enter Confirmation Code</h3>
-                    <p><span>Enter the 6-digit code we sent to<br/>your email.<b>Request a new one.</b></span></p>
-                    <input name="code" placeholder="Confirmation Code" value={confCode.code} onChange={handleChange} required />
 
-                    <button type="submit" disabled={loading}>
+                    <p>
+                    <span>
+                        Enter the 6-digit code we sent to <br />
+                        <i>{userEmail}</i>. <b>Request a new one.</b>
+                    </span>
+                    </p>
+
+                    <input 
+                        name="code" 
+                        placeholder="Confirmation Code" 
+                        value={confCode.code} 
+                        onChange={handleChange} 
+                        required 
+                    />
+
+                    <button type="submit" disabled={loading || !confCode.code.trim()}>
                         {loading ? (
                             <div className="conf-loader">
                                 <div></div><div></div><div></div>
                             </div>
                         ) : "Next"}
                     </button>
+                    
                     <span>
-                      <Link 
-                     to="/signup" 
-                     className="go-back" 
-                     onClick={() => localStorage.removeItem("userEmail")} >Go back</Link>
+                        <Link 
+                            to="/signup" 
+                            className="go-back" 
+                            onClick={() => localStorage.removeItem("userEmail")} 
+                        >
+                            Go back
+                        </Link>
                     </span>
                     <span>
                         Have an account? <Link to="/login">Log in</Link>
