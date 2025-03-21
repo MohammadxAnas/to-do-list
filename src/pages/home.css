@@ -186,9 +186,9 @@ h1 {
 .idea-btn{
     background: none;
     position: relative;
+    color: rgb(174, 174, 10);
     border: none;
     font-size: 18px;
-    padding-bottom: 5px;
     transition: color 0.2s ease, transform 0.2s ease;
 }
 .idea-btn:hover{
@@ -296,4 +296,6 @@ h1 {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  
+  .rocket{
+    font-size: 25px;
+  }

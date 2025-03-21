@@ -35,17 +35,17 @@ export default function Home() {
         }),
       })
       const data = await response.json();
-      const suggestion =
+     let suggestion =
         data.candidates?.[0]?.content?.parts?.[0]?.text ||
         "Sorry, I didn't understand that.";
-      console.log("suggestion=",suggestion);
-        setTaskSuggestions((prev) => {
-          const updatedSuggestions = { ...prev, [taskId]: suggestion };
-          console.log("Updated Suggestions:", updatedSuggestions); // 🔍 Log new state
-          return updatedSuggestions;
-        });
-     
-      
+      suggestion = suggestion.replace(/\*\*/g, ""); 
+      suggestion = suggestion.replace(/\* /g,"⚡" ); 
+      console.log(suggestion);
+      setTaskSuggestions((prev) => ({
+        ...prev,
+        [taskId]: suggestion,
+      }));
+    
     }catch(error){
       console.error("Error fetching response:", error);
     }  
@@ -176,7 +176,7 @@ export default function Home() {
       </div>
 
       <div className="home">
-        <h1>✨What’s the Plan Today? </h1>
+        <h1><span className="rocket">🚀</span>What’s the Plan Today? </h1>
 
         {/* 🔹 Show Loader while fetching data */}
         {loading ? (
@@ -235,7 +235,7 @@ export default function Home() {
                     {/* Hide Idea Button when a suggestion is available */}
                     {!taskSuggestions[task._id] && (
                       <button onClick={() => sendMessage(task.todo, task._id)} className="idea-btn">
-                        ✨
+                         <FaLightbulb />
                       </button>
                     )}
                   </div>
@@ -244,7 +244,9 @@ export default function Home() {
                 {/* Suggestion should appear on a new line */}
                 {taskSuggestions[task._id] && (
                   <div className="task-suggestion">
-                    <FaLightbulb /> {taskSuggestions[task._id]}
+                   {taskSuggestions[task._id].split("\n").map((line, index) => (
+                  <p key={index}>{line}</p>
+                ))}
                   </div>
                 )}
               </>
