@@ -3,12 +3,12 @@ import axios from "axios";
 import "./home.css";
 import { baseURL } from "../utils/constant";
 import { API_KEY } from "../utils/constant";
-import { FaEdit, FaTrash, FaPlus, FaLightbulb } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaLightbulb, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
 import { handleSuccess } from "../utils/toast";
-import jwtDecode from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
 
 
 export default function Home() {
@@ -19,6 +19,7 @@ export default function Home() {
   const [loggedInUser, setLoggedInUser] = useState();
   const [loading, setLoading] = useState(true); // 🔹 Loading state added
   const navigate = useNavigate();
+  const [expanded, setExpanded] = useState(false);
 
   const [taskSuggestions, setTaskSuggestions] = useState({});
 
@@ -133,18 +134,6 @@ export default function Home() {
     }
   };
 
-  // Delete a task
-  const removeTask = async (id) => {
-    try {
-      await axios.delete(`${baseURL}/api/delete/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      setTasks(tasks.filter((task) => task._id !== id));
-    } catch (err) {
-      console.error("Error deleting task:", err);
-    }
-  };
-
   // Start editing a task
   const startEditing = (task) => {
     setEditingTask(task._id);
@@ -168,7 +157,17 @@ export default function Home() {
     }
   };
 
-  
+   // Delete a task
+   const removeTask = async (id) => {
+    try {
+      await axios.delete(`${baseURL}/api/delete/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      setTasks(tasks.filter((task) => task._id !== id));
+    } catch (err) {
+      console.error("Error deleting task:", err);
+    }
+  };
   const handleRemove = () => {
     if (!window.confirm("Are you sure you want to remove your account? This action cannot be undone.")) {
         return;
@@ -181,8 +180,13 @@ export default function Home() {
     }
 
     try {
-        const decodedToken = jwtDecode(token); // Decode the token
-        const userId = decodedToken.id; // Extract user ID (check JWT structure)
+        const decodedToken = jwtDecode(token); // Decode JWT token
+        const userId = decodedToken.id || decodedToken._id; // Extract user ID
+
+        if (!userId) {
+            console.error("User ID not found in token.");
+            return;
+        }
 
         axios.delete(`${baseURL}/auth/remove/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
@@ -195,13 +199,13 @@ export default function Home() {
             }, 1000);
         })
         .catch((err) => {
-            console.error("Error removing account:", err);
+            console.error("Error deleting account:", err.response?.data || err.message);
         });
     } catch (error) {
         console.error("Error decoding token:", error);
     }
 };
-
+  
 
 
   return (
@@ -209,10 +213,25 @@ export default function Home() {
     <div className="main">
     <div className="greeting">
         <h1 className="logo">FocusFlow🎯</h1>
-        <div>
-        <button className="logout" onClick={handleLogout}>Logout</button>
-        <button className="remove-acc" onClick={handleRemove}>Remove Account</button>
-        </div>
+        <div
+      className={`dynamic-island ${expanded ? "expanded" : ""}`}
+      onClick={() => setExpanded(!expanded)}
+    >
+      <div className="island-content">
+        {expanded ? (
+          <>
+            <button className="logout" onClick={handleLogout}>
+              Logout
+            </button>
+            <button className="remove-acc" onClick={handleRemove}>
+              Remove Account
+            </button>
+          </>
+        ) : (
+          <FaSignOutAlt />
+        )}
+      </div>
+    </div>
       </div>
 
       <div className="home">
