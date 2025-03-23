@@ -79,13 +79,42 @@ export default function Home() {
   }, [navigate]);
   
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("loggedInUser");
-    handleSuccess("User Logged out ⚡");
-    setTimeout(() => {
-      navigate("/login");
-    }, 1000);
+  const handleLogout = async() => {
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+          console.error("No token found. Cannot remove account.");
+          return;
+      }
+
+        const decodedToken = jwtDecode(token); // Decode JWT token
+        const userId = decodedToken.id || decodedToken._id; // Extract user ID
+
+        if (!userId) {
+            console.error("User ID not found in token.");
+            return;
+        }
+
+        await axios.post(`${baseURL}/auth/logout/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("loggedInUser");
+          handleSuccess("User Logged out ⚡");
+          setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+        })
+        .catch((err) => {
+            console.error("internal error:",err );
+        });
+    } catch (error) {
+        console.error("Error decoding token:", error);
+    }
+
+    
   };
 
   const fetchTasks = async (token) => {
@@ -94,7 +123,6 @@ export default function Home() {
       const res = await axios.get(`${baseURL}/api/get`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
       setTasks(res.data);
     } catch (err) {
       console.error("Error fetching tasks:", err.response?.data || err.message);
