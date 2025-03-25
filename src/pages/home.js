@@ -90,9 +90,7 @@ export default function Home() {
             localStorage.removeItem("token");
             localStorage.removeItem("loggedInUser");
             handleSuccess("User Logged out ⚡");
-            setTimeout(() => {
             navigate("/login");
-          }, 1000);
           })
           .catch((err) => {
               console.error("internal error:",err );
