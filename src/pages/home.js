@@ -67,9 +67,39 @@ export default function Home() {
     }
 
     // Clear localStorage when tab is closed
-    const handleUnload = () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("loggedInUser");
+    const handleUnload = async() => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            console.error("No token found. Cannot remove account.");
+            return;
+        }
+  
+          const decodedToken = jwtDecode(token); // Decode JWT token
+          const userId = decodedToken.id || decodedToken._id; // Extract user ID
+  
+          if (!userId) {
+              console.error("User ID not found in token.");
+              return;
+          }
+  
+          await axios.post(`${baseURL}/auth/logout/${userId}`, {
+              headers: { Authorization: `Bearer ${token}` }
+          })
+          .then(() => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("loggedInUser");
+            handleSuccess("User Logged out ⚡");
+            setTimeout(() => {
+            navigate("/login");
+          }, 1000);
+          })
+          .catch((err) => {
+              console.error("internal error:",err );
+          });
+      } catch (error) {
+          console.error("Error decoding token:", error);
+      }
     };
     window.addEventListener("beforeunload", handleUnload);
   
